@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Divyanshika &amp; Kumel — 11 · 12 · 2026</title>
+<meta name="description" content="You've been invited by Divyanshika & Kumel. 11.12.2026.">
+<link rel="icon" type="image/png" href="assets/monogram.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F4EFE4; --deep-cream:#EBE3D3; --paper:#F7F2E8; --paper-shade:#ECE3D0;
+  --oxblood:#4A1C1C; --oxblood-hi:#5E2727; --oxblood-deep:#3A1414;
+  --forest-dark:#1A1610; --forest-warm:#2E2418; --euca:#8A9A82; --ink-sage:#5C6B57;
+  --candle:#E8C79A; --gold-line:#B08D57;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --ease-give:cubic-bezier(0.34,1.2,0.64,1);
+  --serif:"Cormorant Garamond",serif;
+  --script:"Tangerine",cursive;
+  --body:"EB Garamond",serif;
+  --warmth:0;
+}
+/* the acts sit behind the stage; revealed underneath as the stage dissolves */
+.acts{visibility:hidden}
+body.acts-ready .acts{visibility:visible}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--forest-dark);
+  color:var(--oxblood);
+  font-family:var(--body);
+  font-size:18px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+/* lock scroll until opened — pin the whole document to the top */
+body:not(.is-open){overflow:hidden;height:100svh;position:fixed;inset:0}
+img{display:block;max-width:100%}
+a{color:inherit}
+
+/* ---------------- continuous forest background ---------------- */
+.forest-bg{
+  position:fixed;inset:0;z-index:-2;
+  background:url("assets/forest.jpg") center/cover no-repeat;
+  filter:saturate(calc(0.55 + 0.45*var(--warmth))) brightness(calc(0.56 + 0.46*var(--warmth)));
+  transform:scale(1.06);
+  transition:filter .12s linear;
+}
+.forest-bg::after{
+  content:"";position:absolute;inset:0;mix-blend-mode:screen;
+  background:radial-gradient(130% 95% at 50% 46%, rgba(232,199,154,calc(0.18*var(--warmth))), transparent 60%);
+}
+/* once the card has taken over, a calm cream underlay behind everything */
+.page-underlay{position:fixed;inset:0;z-index:-3;background:var(--cream)}
+
+/* ---------------- film grain ---------------- */
+.grain{
+  position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------- persistent chrome ---------------- */
+.brand-kd{
+  position:fixed;top:12px;left:16px;z-index:9500;display:block;line-height:0;
+  text-decoration:none;opacity:0;pointer-events:none;
+  transition:opacity .6s var(--ease);
+}
+.brand-kd img{width:38px;height:auto}
+body.is-open .brand-kd{opacity:.68;pointer-events:auto}
+.brand-kd:hover{opacity:1}
+.mute{
+  position:fixed;top:16px;right:18px;z-index:9500;background:none;border:none;cursor:pointer;
+  color:var(--oxblood);opacity:0;font-family:var(--serif);font-variant:small-caps;
+  letter-spacing:.14em;font-size:.78rem;transition:opacity .6s var(--ease);
+}
+body.is-open .mute{opacity:.45}
+.mute:hover{opacity:.85}
+
+/* ================================================================
+   THE STAGE — the hero. Envelope lives here; card rises to fill it.
+   ================================================================ */
+.stage{
+  position:relative;height:100svh;width:100%;
+  display:grid;place-items:center;
+  perspective:1400px;
+  z-index:5;
+}
+/* the little instruction under the envelope */
+.hint{
+  position:absolute;left:50%;bottom:8svh;transform:translateX(-50%);
+  font-family:var(--serif);font-variant:small-caps;letter-spacing:.3em;
+  text-transform:lowercase;font-size:.8rem;color:var(--cream);opacity:.55;
+  text-align:center;transition:opacity .5s ease;white-space:nowrap;z-index:20;
+}
+.hint::before{content:"✶ "}.hint::after{content:" ✶"}
+body.opening .hint{opacity:0}
+
+/* the header that floats above the sealed envelope (only before opening) */
+.stage-head{
+  position:absolute;left:0;right:0;top:10svh;text-align:center;z-index:6;
+  transition:opacity .6s ease, transform .8s var(--ease);
+}
+body.opening .stage-head{opacity:0;transform:translateY(-20px)}
+.stage-head .kicker{color:var(--cream);opacity:.92}
+.stage-head .names-script{color:var(--cream);margin-top:.1em}
+
+.kicker{
+  font-family:var(--serif);font-weight:500;font-variant:small-caps;
+  letter-spacing:.26em;text-transform:lowercase;
+  font-size:clamp(.85rem,3.6vw,1.2rem);
+}
+.names-script{
+  font-family:var(--script);font-weight:400;line-height:.8;
+  font-size:clamp(3rem,15vw,5.5rem);
+}
+
+/* ---------------- the envelope (z-index sandwich) ----------------
+   Layer order (back → front): env-back(1) · card(2) · env-front(3) · flap(4)
+   The card is TALLER than the envelope and anchored to the bottom, so when it
+   slides up it emerges from behind the front pocket — a real letter leaving a pocket.
+*/
+.envelope{
+  position:relative;
+  width:min(86vw,420px);
+  aspect-ratio:1.46/1;
+  transform-style:preserve-3d;
+  z-index:10;
+}
+
+/* back wall (interior) */
+.env-back{
+  position:absolute;inset:0;border-radius:7px;z-index:1;
+  background:linear-gradient(158deg,#E6DBC4,#D8CBB0);
+  box-shadow:0 34px 60px -24px rgba(20,16,10,.8), inset 0 0 30px rgba(120,90,60,.15);
+}
+
+/* the invitation card — bottom-anchored; at rest its top tucks UNDER the flap
+   (top sits ~16% below the envelope top, well within the flap's 62% cover). */
+.card{
+  position:absolute;left:5%;bottom:8%;top:auto;width:90%;height:76%;
+  background:radial-gradient(150% 110% at 50% 0%, #FBF7EE, var(--paper) 42%, var(--paper-shade) 100%);
+  border-radius:5px;
+  padding:5% 7%;
+  display:flex;flex-direction:column;justify-content:center;gap:.2em;
+  z-index:2;                            /* BEHIND the front pocket */
+  box-shadow:0 3px 14px rgba(20,16,10,.16);
+  transform:translateY(0);
+  transition:transform 1.3s cubic-bezier(0.33,0.9,0.35,1) 1s;   /* waits for the flap to finish folding */
+  will-change:transform;
+}
+.card::before{  /* faint paper fiber */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+/* card rises up out of the pocket to sit in the upper viewport */
+body.opening .card{transform:translateY(-72%)}
+.card-inner{opacity:0;transition:opacity .8s ease .7s;text-align:center}
+body.opening .card-inner{opacity:1}
+/* takeover: the OPAQUE card scales up to fill the screen and becomes the page
+   (never a transparent cross-dissolve — Gemini's fix) */
+body.card-takeover .card{
+  transition:transform 1s cubic-bezier(0.7,0,0.3,1);
+  transform:translateY(-72%) scale(16);
+  box-shadow:none;border-radius:0;
+}
+body.card-takeover .card-inner{opacity:0;transition:opacity .45s ease}
+/* forest + envelope shell fade out behind the growing card */
+body.card-takeover .forest-bg,
+body.card-takeover .env-back,
+body.card-takeover .env-front,
+body.card-takeover .flap{opacity:0;transition:opacity .5s ease}
+
+/* front pocket — solid panel with a V notch; hides the card's lower half */
+.env-front{
+  position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:7px;
+  background:linear-gradient(158deg,#F1E7D3,#E4D8BF);
+  clip-path:polygon(0 0, 50% 40%, 100% 0, 100% 100%, 0 100%);
+  box-shadow:inset 0 8px 14px -6px rgba(120,90,60,.35);
+}
+.env-front::after{  /* soft center crease so the pocket reads as depth, not flat */
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(120,90,60,.14), transparent 45%);
+  clip-path:polygon(0 0, 50% 40%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* the flap — hinges at the top edge; a slow, VISIBLE fold you can watch */
+.flap{
+  position:absolute;left:0;top:0;width:100%;height:62%;
+  z-index:4;transform-origin:top center;
+  transform:rotateX(0deg);
+  transform-style:preserve-3d;
+}
+.flap-face{position:absolute;inset:0;backface-visibility:hidden}
+.flap-front{  /* outside of the flap: cream, carries the lace V */
+  background:linear-gradient(158deg,#F1E7D3,#E4D8BF);
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+}
+.flap-front .flap-lace{
+  position:absolute;left:50%;top:0;width:104%;transform:translateX(-50%);
+  filter:drop-shadow(0 2px 5px rgba(20,16,10,.25));
+}
+.flap-back{  /* inside of the flap: darker paper, revealed as it folds back */
+  background:linear-gradient(158deg,#E4D8C0,#D3C6AB);
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  transform:rotateX(180deg);
+  backface-visibility:hidden;
+}
+/* The fold: opaque and fully visible the whole way. It swings back to lie flat
+   against the top (−180°), then holds — only fading at the very end. */
+body.opening .flap{
+  animation:flap-open 1.1s cubic-bezier(0.45,0.05,0.35,1) forwards;
+}
+@keyframes flap-open{
+  0%   {transform:rotateX(0deg)}
+  70%  {transform:rotateX(-168deg)}   /* the visible fold */
+  100% {transform:rotateX(-178deg);opacity:1}
+}
+/* after the fold completes, gently retire the flap so it can't linger */
+body.flap-done .flap{opacity:0;transition:opacity .5s ease}
+
+/* the wax seal — sits at the flap's point (sealing flap to body), brought
+   forward in 3D so the preserve-3d flap can't cover it */
+.seal{
+  position:absolute;left:50%;top:56%;transform:translate(-50%,-50%) translateZ(6px);
+  width:21%;aspect-ratio:1;border:none;cursor:pointer;z-index:6;padding:0;
+  /* irregular, hand-pressed wax edge (not a perfect circle) */
+  border-radius:47% 53% 50% 50% / 52% 48% 52% 48%;
+  /* matte oxblood wax with pressed-down center */
+  background:
+    radial-gradient(circle at 50% 42%, var(--oxblood-deep) 0%, var(--oxblood) 30%, var(--oxblood-hi) 62%, var(--oxblood) 100%);
+  /* raised rim + soft ambient contact shadow — wax sitting ON the paper */
+  box-shadow:
+    inset 0 2px 3px rgba(232,199,154,.28),
+    inset 0 -6px 12px rgba(0,0,0,.5),
+    inset 0 0 0 3px rgba(58,20,20,.45),
+    0 3px 5px rgba(20,16,10,.4), 0 8px 16px rgba(20,16,10,.3);
+  display:grid;place-items:center;
+  transition:transform .12s var(--ease-give), opacity .3s ease;
+  animation:seal-breathe 5s ease-in-out infinite;
+}
+@keyframes seal-breathe{0%,100%{scale:1}50%{scale:1.015}}
+.seal::before{  /* a small drip of wax at the base — organic touch */
+  content:"";position:absolute;bottom:-7%;left:52%;width:16%;height:22%;
+  border-radius:50% 50% 50% 50%/40% 40% 60% 60%;
+  background:radial-gradient(circle at 45% 30%, var(--oxblood-hi), var(--oxblood-deep));
+  box-shadow:0 3px 5px rgba(20,16,10,.35);pointer-events:none;z-index:-1;
+}
+/* debossed monogram — the real KD logo, pressed INTO the wax. The logo shape is
+   a mask over a dark fill; a pale drop-shadow on the lower edge fakes the deboss. */
+.seal-mono{position:relative;width:58%;aspect-ratio:1;display:block;
+  background:var(--oxblood-deep);
+  -webkit-mask:url("assets/monogram.png") center/contain no-repeat;
+          mask:url("assets/monogram.png") center/contain no-repeat;
+  filter:drop-shadow(0 1px .5px rgba(232,199,154,.4)) drop-shadow(0 -.5px .5px rgba(0,0,0,.45));
+  opacity:.9;}
+.seal.pressed{transform:translate(-50%,-50%) translateZ(6px) scale(.975);animation:none}
+body.opening .seal{opacity:0;pointer-events:none;animation:none;transition:opacity .2s ease}
+
+/* warm light that blooms from the envelope mouth */
+.light-bloom{
+  position:absolute;left:50%;top:36%;width:8%;height:8%;transform:translate(-50%,-50%);
+  border-radius:50%;pointer-events:none;opacity:0;z-index:5;mix-blend-mode:screen;
+  background:radial-gradient(circle, rgba(255,244,225,.95), rgba(232,199,154,.5) 32%, transparent 72%);
+}
+body.opening .light-bloom{animation:bloom 1.6s ease-out forwards;animation-delay:.5s}
+@keyframes bloom{0%{opacity:0;width:8%;height:8%}30%{opacity:.55}100%{opacity:.35;width:240%;height:210%}}
+
+/* ================================================================
+   THE FLOWN CARD — after rising, the card becomes a full-screen sheet
+   that scrolls. We clone the card content into this scrolling document.
+   Implementation: the .card scales up and its content becomes the page.
+   ================================================================ */
+/* content shared by the card, styled to look printed on paper */
+.invite-head{text-align:center}
+.invite-head .kicker{color:var(--oxblood);opacity:.8}
+.invite-head .names-script{color:var(--oxblood);margin:.05em 0 .1em}
+
+/* ================================================================
+   SCROLL ACTS (revealed after the card takes over)
+   ================================================================ */
+.acts{position:relative;z-index:4;
+  background:
+    linear-gradient(0deg, rgba(211,196,168,.10), rgba(211,196,168,.10)),
+    url("assets/paper.jpg") center/560px repeat,
+    var(--cream);
+}
+/* warm vignette drawing the eye inward — reads as light falling on paper */
+.acts::before{
+  content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 42%, transparent 55%, rgba(120,90,55,.10) 100%);
+}
+/* ---- themed botanical dressing (fills the empty margins) ----
+   A fixed watercolor eucalyptus presence behind every act. On phones it is a
+   soft top-and-bottom wash from the frame art; on wider screens, trailing
+   vines flank the content column in the side gutters. Very low opacity so
+   text stays effortlessly readable. */
+.botanic-dress{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  opacity:0;transition:opacity 1.2s ease}
+body.is-open .botanic-dress{opacity:1}
+/* phone: frame art anchored top & bottom; the leafy sides frame the edges while
+   the center fades out early so it never crowds the copy */
+.bd-top,.bd-bottom{position:absolute;left:50%;transform:translateX(-50%);
+  width:min(148vw,720px);height:30vh;background:no-repeat center/cover;opacity:.42}
+.bd-top{top:-5vh;background-image:url("assets/frame-botanical.png");
+  -webkit-mask:linear-gradient(#000 22%,transparent 78%);mask:linear-gradient(#000 22%,transparent 78%)}
+.bd-bottom{bottom:-5vh;background-image:url("assets/frame-botanical.png");transform:translateX(-50%) scaleY(-1);
+  -webkit-mask:linear-gradient(#000 22%,transparent 78%);mask:linear-gradient(#000 22%,transparent 78%)}
+/* side vines: hidden on phones, revealed where the gutter opens up */
+.bd-left,.bd-right{display:none}
+.act{
+  position:relative;min-height:100svh;display:grid;place-items:center;
+  padding:10vh 7vw;isolation:isolate;z-index:2;
+}
+
+/* ---- Act: the promise (swans / heart / save-the-date) ---- */
+#act-promise{position:relative;overflow:hidden}
+/* hand-drawn botanical sprigs framing the corners (SVG, crisp at any size) */
+.botanical{position:absolute;width:min(46vw,260px);opacity:.55;pointer-events:none;z-index:0}
+.botanical.tl{top:-2%;left:-8%;transform:rotate(8deg)}
+.botanical.br{bottom:-2%;right:-8%;transform:rotate(188deg)}
+.promise{position:relative;z-index:2;display:grid;justify-items:center;gap:clamp(1.8rem,5.5vh,3.2rem);max-width:min(92vw,560px);width:100%}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.shown{opacity:1;transform:none}
+
+.polaroid{background:#FBF8F0;padding:3.6% 3.6% 13%;width:min(54vw,220px);
+  box-shadow:0 3px 6px rgba(74,28,28,.06), 0 16px 32px rgba(74,28,28,.12);
+  border:1px solid rgba(74,28,28,.05);transform:rotate(-3.5deg)}
+/* elegant sage botanical placeholder (replace .polaroid-photo bg with a real photo later) */
+.polaroid-photo{aspect-ratio:1;position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 120% at 30% 20%, #F3F1E6, #E4E7DA 70%);}
+.polaroid-photo::after{content:"";position:absolute;inset:0;opacity:.55;
+  background:center/78% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%237E8A6E' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M50 88 C50 60 50 40 50 20'/%3E%3Cg stroke='%238A9A82'%3E%3Cellipse cx='40' cy='30' rx='7' ry='4' transform='rotate(-35 40 30)' fill='%23AEBBA0' fill-opacity='0.5'/%3E%3Cellipse cx='60' cy='38' rx='7' ry='4' transform='rotate(35 60 38)' fill='%23AEBBA0' fill-opacity='0.5'/%3E%3Cellipse cx='42' cy='48' rx='8' ry='4.5' transform='rotate(-32 42 48)' fill='%23AEBBA0' fill-opacity='0.5'/%3E%3Cellipse cx='59' cy='56' rx='8' ry='4.5' transform='rotate(32 59 56)' fill='%23AEBBA0' fill-opacity='0.5'/%3E%3Cellipse cx='44' cy='66' rx='7' ry='4' transform='rotate(-30 44 66)' fill='%23AEBBA0' fill-opacity='0.5'/%3E%3Cellipse cx='57' cy='73' rx='7' ry='4' transform='rotate(30 57 73)' fill='%23AEBBA0' fill-opacity='0.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.polaroid-cap{font-family:var(--body);font-style:italic;color:var(--oxblood);text-align:center;font-size:.92rem;margin-top:7%;opacity:.85}
+
+.heart-frame{position:relative;width:min(72vw,320px);display:grid;place-items:center}
+.heart-frame img{width:100%;filter:drop-shadow(0 8px 18px rgba(120,85,55,.14))}
+.heart-text{position:absolute;text-align:center;color:var(--oxblood);width:60%}
+.std-script{display:block;font-family:var(--script);font-size:clamp(2.4rem,11vw,3.5rem);line-height:.82}
+.std-date{display:block;font-family:var(--serif);font-variant:small-caps;letter-spacing:.2em;font-size:clamp(.9rem,4vw,1.1rem);margin-top:.5em}
+
+/* Swans: a pale paper-cut given real mass — a solid ivory silhouette (cut from
+   the PNG's alpha) resting on a soft sage vellum medallion, with the original
+   image floated on top only for its embossed line detail. Reads as tactile
+   paper relief, not a faint ghost. */
+.swans{position:relative;width:min(80vw,390px);margin:0;display:flex;flex-direction:column;
+  align-items:center;isolation:isolate;padding-top:.5rem}
+/* names sit ABOVE the oval; the swan art follows below */
+.swan-names{order:0}
+.swans img{order:1}
+/* the medallion ground — sage vellum with a fine gold hairline; sits behind the swan art.
+   Anchored to the swan image (bottom portion of the figure), not the whole flex box. */
+.swan-medallion{
+  position:absolute;z-index:-2;left:50%;bottom:0;transform:translate(-50%,0);
+  width:118%;aspect-ratio:1.34;border-radius:50%;
+  background:
+    radial-gradient(78% 70% at 50% 40%,
+      rgba(247,242,232,.55) 0%,
+      rgba(138,154,130,.30) 55%,
+      rgba(92,107,87,.26) 100%);
+  border:1px solid rgba(176,141,87,.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.5),
+    inset 0 -20px 40px rgba(74,28,28,.07),
+    0 20px 46px -14px rgba(74,28,28,.16);
+}
+/* solid ivory swan body, masked from the PNG — this is what gives them presence.
+   Anchored to the bottom (aligned with the overlay img), and same width, so the
+   silhouette and the embossed-line overlay register exactly.
+   The layered same-color drop-shadows trace a crisp gold-tinted outline around the
+   silhouette so the swans' borders read clearly against the medallion. */
+.swans::before{
+  content:"";position:absolute;z-index:-1;left:0;bottom:0;width:100%;aspect-ratio:1200/895;
+  background:linear-gradient(150deg,#FCF9F1 0%,#EDE3D0 100%);
+  -webkit-mask:url("assets/swans.png") center/contain no-repeat;
+          mask:url("assets/swans.png") center/contain no-repeat;
+  filter:
+    drop-shadow(.6px 0 0 rgba(150,120,74,.55)) drop-shadow(-.6px 0 0 rgba(150,120,74,.55))
+    drop-shadow(0 .6px 0 rgba(150,120,74,.55)) drop-shadow(0 -.6px 0 rgba(150,120,74,.55))
+    drop-shadow(0 1px 0 rgba(255,255,255,.7)) drop-shadow(0 12px 20px rgba(74,28,28,.18));
+}
+/* original image floats on top, multiplied, to bring up the embossed line detail —
+   higher contrast + opacity so the interior borders (neck, wing, breast) are defined */
+.swans img{width:100%;position:relative;opacity:.82;mix-blend-mode:multiply;
+  filter:contrast(1.55) brightness(.98) drop-shadow(0 -1px 0 rgba(255,255,255,.6))}
+.swan-names{position:relative;z-index:1;order:0;display:flex;justify-content:center;align-items:baseline;
+  gap:.5em;margin-bottom:2.2rem;font-family:var(--script);
+  font-size:clamp(2rem,9vw,2.8rem);line-height:1;color:var(--oxblood)}
+.swan-names::before{content:"&";font-family:var(--serif);font-size:.62em;opacity:.6;
+  order:2;align-self:center}
+.swan-names span:last-child{order:3}
+.promise-line{font-family:var(--serif);font-weight:500;font-size:clamp(1.35rem,6vw,2rem);
+  color:var(--oxblood);text-align:center;line-height:1.35;letter-spacing:.01em}
+.promise-line em{font-family:var(--script);font-style:normal;font-size:clamp(2.2rem,10vw,3.2rem);
+  display:inline-block;line-height:1;margin-top:.15em}
+.promise-caption{font-family:var(--serif);font-size:clamp(1.05rem,4.4vw,1.35rem);color:var(--oxblood);
+  opacity:.82;text-align:center;line-height:1.55;max-width:34ch}
+.promise-invite{font-family:var(--script);font-size:clamp(1.7rem,7vw,2.3rem);display:block;
+  line-height:1;margin:.15em 0 .3em;opacity:1}
+
+/* ---- Act: the day (timeline) ---- */
+#act-day{position:relative;overflow:hidden;color:var(--oxblood)}
+#act-day .botanical{width:min(40vw,230px);opacity:.4}
+#act-day .botanical.tl{top:-1%;left:-9%;transform:rotate(4deg)}
+#act-day .botanical.br{bottom:-1%;right:-9%;transform:rotate(184deg)}
+.day{position:relative;z-index:2;width:min(92vw,560px);margin:0 auto}
+.day .kicker{color:var(--oxblood);opacity:.8;text-align:center;display:block}
+.day .names-script{color:var(--oxblood);font-size:clamp(2.6rem,12vw,4.4rem);text-align:center;margin-bottom:.35em}
+/* a small ornamental rule with a diamond, under the heading */
+.day-rule{display:flex;align-items:center;justify-content:center;gap:.7rem;margin:0 auto 1.6em;opacity:.7}
+.day-rule::before,.day-rule::after{content:"";height:1px;width:min(22vw,90px);background:linear-gradient(90deg,transparent,var(--gold-line))}
+.day-rule::after{background:linear-gradient(270deg,transparent,var(--gold-line))}
+.day-rule i{width:7px;height:7px;background:var(--gold-line);transform:rotate(45deg)}
+.timeline{position:relative;padding-left:54px;margin-top:1rem}
+/* spine centered exactly on the diamond bullets:
+   diamonds sit at x=13.5px (list padding 54 − 46 + 11/2); a 2px spine centers at
+   left:12.5px. It runs from the first bullet's center to the last bullet's center. */
+.tl-line{position:absolute;left:12.5px;top:11px;width:2px;height:calc(100% - 22px)}
+.tl-list{list-style:none;display:grid;gap:clamp(1.6rem,4.4vh,2.5rem)}
+.tl-stop{position:relative;opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.tl-stop.shown{opacity:1;transform:none}
+.tl-stop::before{  /* small diamond bullet */
+  content:"";position:absolute;left:-46px;top:6px;width:11px;height:11px;
+  background:var(--gold-line);transform:rotate(45deg);
+  box-shadow:0 0 0 4px var(--cream), 0 0 0 5px rgba(176,141,87,.4);
+}
+.tl-stop time{display:block;font-family:var(--serif);font-variant:small-caps;letter-spacing:.16em;font-size:.98rem;opacity:.68}
+.tl-stop .lbl{font-family:var(--serif);font-weight:500;font-size:clamp(1.2rem,5.3vw,1.65rem);line-height:1.2;
+  display:flex;align-items:baseline;gap:.5em}
+.tl-icon{width:1.05em;height:1.05em;flex:none;align-self:center;
+  fill:none;stroke:var(--gold-line);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.tl-sub{font-family:var(--body);font-style:italic;font-size:.95rem;opacity:.66;margin-top:.15em}
+/* the reception is days later and in another city — set it apart with a small gap + gold accent */
+.tl-stop--away{margin-top:.6rem}
+.tl-stop--away::before{background:var(--oxblood);box-shadow:0 0 0 4px var(--cream), 0 0 0 5px rgba(74,28,28,.4)}
+
+/* ---- Act: the vows (monogram) ---- */
+#act-vows{background:radial-gradient(125% 95% at 50% 38%, var(--cream), var(--deep-cream));color:var(--oxblood)}
+.vows{display:grid;justify-items:center;gap:1.1rem;text-align:center}
+/* real KD monogram, revealed with an upward wipe (reads like ink settling) */
+.mono-draw{width:min(38vw,150px);margin-bottom:.5rem}
+.mono-draw img{
+  width:100%;height:auto;
+  -webkit-mask:linear-gradient(#000 0 0) no-repeat;
+  mask:linear-gradient(#000 0 0) no-repeat;
+  -webkit-mask-size:100% 0%;mask-size:100% 0%;
+  -webkit-mask-position:0 100%;mask-position:0 100%;
+  opacity:0;transition:opacity .4s ease;
+}
+.vows.drawn .mono-draw img{
+  opacity:1;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  transition:opacity .4s ease, -webkit-mask-size 1.5s var(--ease) .1s, mask-size 1.5s var(--ease) .1s;
+}
+.vows .kicker{color:var(--oxblood);opacity:.8}
+.vows .names-script{color:var(--oxblood);font-size:clamp(2.7rem,13vw,4.6rem)}
+.vows-blessing{font-family:var(--serif);font-style:italic;font-size:clamp(1.15rem,5vw,1.55rem);
+  line-height:1.5;color:var(--oxblood);opacity:.85;max-width:26ch;margin:0 auto}
+.vows-line{font-family:var(--serif);font-variant:small-caps;letter-spacing:.18em;font-size:clamp(1rem,4.8vw,1.35rem);opacity:.85}
+/* giant faint monogram watermark behind the vows — richness and depth */
+#act-vows{position:relative;overflow:hidden}
+.mono-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(115vw,720px);opacity:.05;pointer-events:none;z-index:0;mix-blend-mode:multiply}
+.vows{position:relative;z-index:2}
+
+/* ---- Act: venue & travel ---- */
+#act-venue{position:relative;overflow:hidden;color:var(--oxblood)}
+#act-venue .botanical{width:min(38vw,220px);opacity:.38}
+#act-venue .botanical.tl{top:-1%;left:-9%;transform:rotate(4deg)}
+#act-venue .botanical.br{bottom:-1%;right:-9%;transform:rotate(184deg)}
+.venue-wrap{position:relative;z-index:2;width:min(92vw,540px);margin:0 auto;text-align:center}
+.venue-wrap .kicker{color:var(--oxblood);opacity:.8;display:block}
+.venue-title{font-family:var(--serif);font-weight:600;font-size:clamp(2.1rem,9vw,3.2rem);line-height:1.05;letter-spacing:.01em}
+.venue-city{font-family:var(--serif);font-variant:small-caps;letter-spacing:.24em;font-size:clamp(1rem,4.6vw,1.3rem);opacity:.72;margin-top:.2em}
+.travel{margin-top:clamp(2.4rem,7vh,3.6rem);text-align:left;
+  border-top:1px solid rgba(74,28,28,.16);border-bottom:1px solid rgba(74,28,28,.16);
+  padding:clamp(2rem,6vw,2.8rem) 0}
+.travel-head{font-family:var(--serif);font-variant:small-caps;letter-spacing:.2em;font-size:1.02rem;
+  opacity:.7;text-align:center;margin-bottom:1.5rem}
+.travel-list{list-style:none;display:grid;gap:1.2rem}
+.travel-list li{display:flex;gap:1rem;align-items:flex-start;font-family:var(--body);line-height:1.5}
+.travel-ico{width:1.5rem;height:1.5rem;flex:none;margin-top:.1em;
+  fill:none;stroke:var(--gold-line);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.92}
+.travel-list b{font-family:var(--serif);font-variant:small-caps;letter-spacing:.1em;font-weight:600;font-size:1.02em}
+.reception-note{margin-top:clamp(2.4rem,6vh,3.2rem);display:flex;gap:.85rem;justify-content:center;align-items:flex-start;
+  font-family:var(--body);line-height:1.5;text-align:left}
+.reception-note .rn-ico{width:1.5rem;height:1.5rem;flex:none;margin-top:.1em;
+  fill:none;stroke:var(--gold-line);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.92}
+.reception-note b{font-family:var(--serif);font-variant:small-caps;letter-spacing:.1em;font-size:1.05em}
+.reception-note span{font-style:italic;opacity:.72;font-size:.96rem}
+
+/* ---- Act: the practical (RSVP / calendar / map / contact) ---- */
+#act-practical{background:var(--deep-cream);color:var(--oxblood);
+  grid-template-rows:none;grid-template-columns:minmax(0,1fr);justify-items:center;justify-content:center;
+  align-content:start;gap:clamp(2.5rem,7vh,4rem);padding-top:12vh;padding-bottom:0}
+.reply-card{position:relative;background:var(--paper);width:min(100%,460px);
+  padding:clamp(2.4rem,8vw,3.4rem);margin:0 auto;overflow:hidden;border-radius:2px;
+  box-shadow:0 4px 8px rgba(74,28,28,.04), 0 18px 36px rgba(74,28,28,.08);
+  border:1px solid rgba(74,28,28,.14)}
+/* delicate engraved inner rule — the hallmark of a fine reply card */
+.reply-card::before{content:"";position:absolute;inset:10px;border:1px solid rgba(74,28,28,.16);
+  border-radius:1px;pointer-events:none}
+.reply-mono{display:block;width:54px;margin:0 auto 1rem;opacity:.9}
+.reply-card .kicker{color:var(--oxblood);margin-bottom:1.6rem;letter-spacing:.24em;display:block;text-align:center}
+.field{display:block;margin:0 0 1.5rem}
+.field span{display:block;font-family:var(--serif);font-variant:small-caps;letter-spacing:.16em;font-size:.85rem;opacity:.7;margin-bottom:.2rem}
+.field input{width:100%;border:none;border-bottom:1px solid rgba(74,28,28,.5);background:transparent;
+  font-family:var(--body);font-size:1.15rem;color:var(--oxblood);padding:.35rem 0;outline:none;transition:border-color .3s}
+.field input:focus{border-color:var(--oxblood)}
+.choice{border:none;margin:1.6rem 0 .6rem}
+.choice legend{font-family:var(--serif);font-variant:small-caps;letter-spacing:.16em;font-size:1.05rem;margin-bottom:.8rem;opacity:.85}
+.wax-toggle{display:block;width:100%;margin:.55rem 0;padding:.75rem;cursor:pointer;
+  font-family:var(--serif);font-variant:small-caps;letter-spacing:.14em;font-size:1.05rem;
+  color:var(--oxblood);background:transparent;border:1px solid rgba(74,28,28,.55);border-radius:2px;
+  transition:transform .12s var(--ease-give),background .35s,color .35s}
+.wax-toggle[aria-pressed="true"]{background:var(--oxblood);color:var(--candle);transform:scale(.982);border-color:var(--oxblood)}
+.send{margin-top:1.4rem;width:100%;padding:.9rem;border:none;cursor:pointer;
+  font-family:var(--serif);font-variant:small-caps;letter-spacing:.2em;font-size:1.1rem;
+  color:var(--cream);background:var(--oxblood);border-radius:2px;transition:background .3s,transform .12s var(--ease-give)}
+.send:hover{background:var(--oxblood-hi)}
+.send:active{transform:scale(.99)}
+.stamp{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%) scale(2.6) rotate(-14deg);opacity:0;
+  width:96px;height:96px;border-radius:50%;display:grid;place-items:center;pointer-events:none;z-index:5;
+  background:radial-gradient(circle at 40% 34%,var(--oxblood-hi),var(--oxblood) 68%,var(--oxblood-deep));
+  box-shadow:0 6px 16px rgba(20,16,10,.4);color:transparent;font-size:0}
+/* the KD logo, in candlelight gold, embossed in the wax stamp */
+.stamp::before{content:"";width:58%;height:58%;background:var(--candle);
+  -webkit-mask:url("assets/monogram.png") center/contain no-repeat;
+          mask:url("assets/monogram.png") center/contain no-repeat}
+.stamp.down{animation:stamp .45s var(--ease) forwards}
+@keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) scale(2.6) rotate(-14deg)}
+  55%{opacity:1;transform:translate(-50%,-50%) scale(.92) rotate(-6deg)}100%{opacity:.97;transform:translate(-50%,-50%) scale(1) rotate(-6deg)}}
+.confirm-msg{font-family:var(--serif);font-style:italic;font-size:1.15rem;text-align:center;margin-top:1.4rem;opacity:.9}
+.calendar-line{text-align:center}
+.calendar-line a,.contact a{color:var(--oxblood);text-decoration:none;border-bottom:1px solid rgba(74,28,28,.5);
+  font-family:var(--serif);font-variant:small-caps;letter-spacing:.14em;font-size:1.05rem;padding-bottom:1px;transition:border-color .3s}
+.calendar-line a:hover,.contact a:hover{border-color:var(--oxblood)}
+.venue{text-align:center;width:min(100%,460px);margin:0 auto}
+.map{width:100%;border-radius:2px;box-shadow:0 14px 30px -18px rgba(20,16,10,.3)}
+.venue-name{font-family:var(--serif);font-style:italic;font-size:1.15rem;margin:.9rem 0 .5rem;opacity:.9}
+.contact{text-align:center;font-family:var(--serif);font-size:1.1rem;max-width:460px;margin:0 auto;padding:0 6vw 14vh;line-height:1.7;opacity:.9}
+.contact a{display:inline-block;margin-top:.2rem}
+.floret{text-align:center;color:var(--oxblood);opacity:.45;font-size:1.3rem;letter-spacing:.4em;line-height:1}
+
+/* focus */
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--oxblood);outline-offset:3px;border-radius:2px}
+.seal:focus-visible{outline-color:var(--candle)}
+
+/* ---------------- desktop refinement ---------------- */
+@media (min-width:820px){
+  .envelope{width:min(52vw,500px)}
+  .stage-head{top:12vh}
+  .names-script{font-size:clamp(4rem,7vw,6rem)}
+  .promise{max-width:600px}
+  .reply-card,.venue{max-width:600px}
+  .act{padding:12vh 8vw}
+  /* desktop: center the timeline as a unit, headings above it */
+  .day{width:auto;max-width:none;display:grid;justify-items:center}
+  .day .kicker,.day .names-script{width:100%}
+  .timeline{width:520px;max-width:88vw;padding-left:54px}
+  #act-day::before{background-size:26% auto}
+  /* desktop: side vines carry the dressing; soften the top/bottom wash right down */
+  .bd-top,.bd-bottom{opacity:.16;width:min(96vw,1100px);height:28vh}
+  .bd-left,.bd-right{display:block;position:absolute;top:50%;transform:translateY(-50%);
+    width:clamp(180px,20vw,300px);height:96vh;background:no-repeat center/contain;opacity:.62}
+  .bd-left{left:-1.5vw;background-image:url("assets/vine-side.png")}
+  .bd-right{right:-1.5vw;background-image:url("assets/vine-side-r.png")}
+}
+/* very wide screens: give the vines a touch more room and presence */
+@media (min-width:1280px){
+  .bd-left,.bd-right{width:clamp(240px,20vw,360px);opacity:.7}
+  .bd-left{left:0}.bd-right{right:0}
+}
+
+/* ---------------- reduced motion ---------------- */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .forest-bg{transition:none}
+  .seal{animation:none}
+  .envelope,.flap,.card{transition:none}
+  .reveal,.tl-stop{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="page-underlay" aria-hidden="true"></div>
+<div class="forest-bg" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<a class="brand-kd" href="#top" aria-label="Back to the beginning"><img src="assets/monogram.png" alt="Divyanshika &amp; Kumel"></a>
+<button class="mute" id="muteBtn" aria-label="Toggle sound">♪ sound on</button>
+
+<!-- swan ripple filter (one-shot) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="ripple" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.015 0.03" numOctaves="2" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="0" id="rippleDisp" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+
+<span id="top"></span>
+
+<!-- ==================== THE STAGE (envelope reveal) ==================== -->
+<div class="stage" id="stage">
+  <div class="stage-head">
+    <p class="kicker">You've been invited by</p>
+    <h1 class="names-script">Divyanshika &amp; Kumel</h1>
+  </div>
+
+  <div class="envelope" id="envelope">
+    <div class="env-back" aria-hidden="true"></div>
+
+    <!-- the card that rises out, carrying the invitation -->
+    <div class="card" id="card" aria-hidden="true">
+      <div class="card-inner">
+        <!-- brief printed line; the full promise lives in the scroll acts below -->
+        <p class="kicker" style="text-align:center;color:var(--oxblood);opacity:.75">The wedding of</p>
+        <h2 class="names-script" style="text-align:center;color:var(--oxblood);font-size:clamp(2rem,9vw,3rem)">Divyanshika &amp; Kumel</h2>
+      </div>
+    </div>
+
+    <div class="light-bloom" aria-hidden="true"></div>
+
+    <div class="env-front" aria-hidden="true"></div>
+
+    <div class="flap" aria-hidden="true">
+      <div class="flap-face flap-back"></div>
+      <div class="flap-face flap-front">
+        <img class="flap-lace" src="assets/lace-flap.png" alt="">
+      </div>
+    </div>
+
+    <button class="seal" id="seal" aria-label="Press the wax seal to open the invitation">
+      <span class="seal-mono" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <p class="hint" id="hint">press the seal</p>
+</div>
+
+<!-- ==================== SCROLL ACTS ==================== -->
+<div class="acts" id="acts">
+
+  <!-- themed watercolor-eucalyptus dressing that fills the margins -->
+  <div class="botanic-dress" aria-hidden="true">
+    <div class="bd-top"></div>
+    <div class="bd-left"></div>
+    <div class="bd-right"></div>
+    <div class="bd-bottom"></div>
+  </div>
+
+  <!-- the promise -->
+  <section class="act" id="act-promise">
+    <img class="botanical tl" src="assets/sprig.svg" alt="" aria-hidden="true">
+    <img class="botanical br" src="assets/sprig.svg" alt="" aria-hidden="true">
+    <div class="promise">
+      <div class="polaroid reveal" data-tilt data-base="rotate(-4deg)">
+        <div class="polaroid-photo"></div>
+        <p class="polaroid-cap">us, someday soon</p>
+      </div>
+      <div class="heart-frame reveal" data-tilt>
+        <img src="assets/lace-heart.png" alt="">
+        <div class="heart-text">
+          <span class="std-script">Save the Date</span>
+          <span class="std-date">11 · 12 · 2026</span>
+        </div>
+      </div>
+      <p class="promise-line reveal">Two hearts. One promise.<br><em>One beautiful forever.</em></p>
+      <figure class="swans reveal" data-tilt>
+        <span class="swan-medallion" aria-hidden="true"></span>
+        <img src="assets/swans.png" alt="Two swans forming a heart with their necks">
+        <figcaption class="swan-names"><span>Divyanshika</span><span>Kumel</span></figcaption>
+      </figure>
+      <p class="promise-caption reveal">Together with their families,<br>
+        <span class="promise-invite">Divyanshika &amp; Kumel</span> joyfully invite you to celebrate
+        the beginning of their forever — a union of love, laughter and togetherness.</p>
+    </div>
+  </section>
+
+  <!-- the day -->
+  <section class="act" id="act-day">
+    <img class="botanical tl" src="assets/sprig.svg" alt="" aria-hidden="true">
+    <img class="botanical br" src="assets/sprig.svg" alt="" aria-hidden="true">
+    <div class="day">
+      <p class="kicker">The celebrations</p>
+      <h2 class="names-script">Divyanshika &amp; Kumel</h2>
+      <div class="day-rule" aria-hidden="true"><i></i></div>
+      <div class="timeline">
+        <svg class="tl-line" viewBox="0 0 2 700" preserveAspectRatio="none" aria-hidden="true">
+          <path id="tl-path" d="M1 2 V698" stroke="var(--gold-line)" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-dasharray="700" stroke-dashoffset="700"/>
+        </svg>
+        <ul class="tl-list">
+          <li class="tl-stop"><time>10 December 2026 · Evening</time>
+            <div class="lbl"><svg class="tl-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="15" r="6"/><path d="M9 9l1.6-4h2.8L15 9M12 5V2.6"/></svg>Engagement &amp; Sangeet</div></li>
+          <li class="tl-stop"><time>11 December 2026 · Morning</time>
+            <div class="lbl"><svg class="tl-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2.6"/><g><ellipse cx="12" cy="5.5" rx="2.4" ry="3.6"/><ellipse cx="12" cy="18.5" rx="2.4" ry="3.6"/><ellipse cx="5.5" cy="12" rx="3.6" ry="2.4"/><ellipse cx="18.5" cy="12" rx="3.6" ry="2.4"/></g></svg>Tilak &amp; Haldi</div></li>
+          <li class="tl-stop"><time>11 December 2026 · Evening</time>
+            <div class="lbl"><svg class="tl-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c4 0 6.5-2.8 6.5-6.4 0-4-3.2-6-3.7-9.6-1.6 1.4-2.3 2.9-2.3 4.6C10.2 8 9.4 6 9.4 3.4 6.9 5.6 5.5 8.9 5.5 12.3 5.5 17 8.6 22 12 22Z"/></svg>Varmala &amp; Phere</div></li>
+          <li class="tl-stop"><time>12 December 2026 · Evening</time>
+            <div class="lbl"><svg class="tl-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.9 6.4L20 10l-6.1 1.6L12 18l-1.9-6.4L4 10l6.1-1.6z"/></svg>Nikah</div></li>
+          <li class="tl-stop tl-stop--away"><time>19 December 2026 · Evening</time>
+            <div class="lbl"><svg class="tl-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l-1 6.5a4 4 0 01-8 0zM12 13.5V20M8.5 20h7"/></svg>Reception Dinner</div>
+            <div class="tl-sub">Pune · venue details to follow</div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- the vows -->
+  <section class="act" id="act-vows">
+    <img class="mono-watermark" src="assets/monogram.png" alt="" aria-hidden="true">
+    <div class="vows" id="vows">
+      <div class="mono-draw">
+        <img src="assets/monogram.png" alt="Divyanshika and Kumel monogram">
+      </div>
+      <p class="vows-blessing">Your love, blessings and presence<br>will make these celebrations truly unforgettable.</p>
+      <p class="vows-line">Formal invitation to follow</p>
+      <p class="kicker" style="margin-top:.4em">With love</p>
+      <h2 class="names-script">Divyanshika &amp; Kumel</h2>
+    </div>
+  </section>
+
+  <!-- venue & travel -->
+  <section class="act" id="act-venue">
+    <img class="botanical tl" src="assets/sprig.svg" alt="" aria-hidden="true">
+    <img class="botanical br" src="assets/sprig.svg" alt="" aria-hidden="true">
+    <div class="venue-wrap">
+      <p class="kicker reveal">The venue</p>
+      <div class="day-rule" aria-hidden="true"><i></i></div>
+      <h3 class="venue-title reveal">SK Klyde Grand</h3>
+      <p class="venue-city reveal">Ghaziabad</p>
+
+      <div class="travel reveal">
+        <p class="travel-head">For guests travelling</p>
+        <ul class="travel-list">
+          <li><svg class="travel-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 14l20-6-2 4-9 3-2 4h-2l1-4-4-1z"/></svg>
+            <span><b>Nearest airport</b><br>Indira Gandhi International Airport, Delhi</span></li>
+          <li><svg class="travel-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="14" rx="2.5"/><path d="M6 11h12M9 20l-2 2M15 20l2 2"/><circle cx="9.2" cy="14" r=".5"/><circle cx="14.8" cy="14" r=".5"/></svg>
+            <span><b>Nearest railway stations</b><br>Ghaziabad Junction · Anand Vihar Terminal</span></li>
+        </ul>
+      </div>
+
+      <div class="reception-note reveal">
+        <svg class="rn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l-1 6.5a4 4 0 01-8 0zM12 13.5V20M8.5 20h7"/></svg>
+        <p><b>Reception Dinner</b> · 19 December 2026, Evening<br>
+        <span>Pune — venue details to follow</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- the practical -->
+  <section class="act" id="act-practical">
+    <div class="reply-card" id="replyCard">
+      <img class="reply-mono" src="assets/monogram.png" alt="" aria-hidden="true">
+      <p class="kicker">Kindly reply</p>
+      <form id="rsvpForm" novalidate>
+        <label class="field"><span>Your name</span><input name="name" type="text" autocomplete="name" required></label>
+        <label class="field"><span>Number of guests</span><input name="guests" type="number" min="1" value="1" inputmode="numeric"></label>
+        <fieldset class="choice">
+          <legend>Will you join us?</legend>
+          <button type="button" class="wax-toggle" data-val="accept" aria-pressed="false">Joyfully Accepts</button>
+          <button type="button" class="wax-toggle" data-val="decline" aria-pressed="false">Regretfully Declines</button>
+        </fieldset>
+        <button class="send" type="submit">Seal &amp; Send</button>
+      </form>
+      <div class="stamp" id="stamp" aria-hidden="true"></div>
+      <p class="confirm-msg" id="confirmMsg" hidden>Your reply is sealed.<br>With love, D &amp; K.</p>
+    </div>
+
+    <p class="calendar-line"><a href="#" id="addCal">add the celebrations to your calendar</a></p>
+
+    <div class="venue">
+      <!-- Hand-illustrated oxblood-on-cream map for SK Klyde Grand, Ghaziabad. -->
+      <svg class="map" viewBox="0 0 320 200" role="img" aria-label="Map to SK Klyde Grand, Ghaziabad">
+        <rect width="320" height="200" fill="#F7F2E8"/>
+        <g stroke="var(--ink-sage)" fill="none" stroke-width="1" opacity=".5">
+          <path d="M-5 60 Q80 48 160 66 T330 58"/><path d="M-5 120 Q90 108 170 126 T330 116"/>
+          <path d="M40 -5 Q56 80 44 205"/><path d="M220 -5 Q236 90 224 205"/>
+        </g>
+        <path d="M20 170 Q90 140 160 168 T300 150" stroke="var(--oxblood)" fill="none" stroke-width="1.6" stroke-dasharray="2 5" opacity=".8"/>
+        <g transform="translate(160 92)">
+          <path d="M0 -20 C12 -20 18 -10 18 -2 C18 10 4 20 0 26 C-4 20 -18 10 -18 -2 C-18 -10 -12 -20 0 -20Z" fill="var(--oxblood)"/>
+          <!-- KD logo, tinted candlelight gold, seated in the pin -->
+          <image href="assets/monogram-candle.png" x="-11" y="-13" width="22" height="22" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+      </svg>
+      <p class="venue-name">SK Klyde Grand · Ghaziabad</p>
+      <p class="calendar-line"><a href="#" id="dirLink">open directions</a></p>
+    </div>
+
+    <p class="floret">✦ &nbsp; ✦ &nbsp; ✦</p>
+    <p class="contact">For any questions, please reach out to us.<br>
+      <a href="tel:+00000000000" id="contactTel">+00 00000 00000</a> <!-- TODO: real number --></p>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const body = document.body, root = document.documentElement;
+  let soundOn = true, audioCtx = null;
+
+  function setWarmth(v){ root.style.setProperty("--warmth", (+v).toFixed(3)); }
+
+  /* force the compositor to drop any stale GPU layer (e.g. after removing the
+     scaled 3D card) — toggling a transform on the root invalidates the buffer */
+  function forceRepaint(){
+    const el=document.getElementById("acts");
+    if(!el) return;
+    el.style.transform="translateZ(0)";
+    // read layout to flush, then clear
+    void el.offsetHeight;
+    requestAnimationFrame(()=>{ el.style.transform=""; });
+  }
+
+  function playCrack(){
+    if(!soundOn) return;
+    try{
+      audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+      const t = audioCtx.currentTime;
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type="triangle"; o.frequency.setValueAtTime(240,t); o.frequency.exponentialRampToValueAtTime(52,t+.13);
+      g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.3,t+.006); g.gain.exponentialRampToValueAtTime(.0001,t+.17);
+      o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t+.18);
+      const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.06,audioCtx.sampleRate), ch=buf.getChannelData(0);
+      for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*Math.pow(1-i/ch.length,3);
+      const s=audioCtx.createBufferSource(), ng=audioCtx.createGain(); s.buffer=buf; ng.gain.value=.12;
+      s.connect(ng).connect(audioCtx.destination); s.start(t);
+    }catch(e){}
+  }
+
+  function animateWarmth(to,dur){
+    const from=parseFloat(getComputedStyle(root).getPropertyValue("--warmth"))||0, start=performance.now();
+    (function frame(now){
+      const t=Math.min(1,(now-start)/dur), e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+      setWarmth(from+(to-from)*e); if(t<1) requestAnimationFrame(frame);
+    })(performance.now());
+  }
+
+  /* ---- hand off: scale the opaque card up to become the page ---- */
+  function handoff(){
+    const stage=document.getElementById("stage");
+    body.classList.add("acts-ready");         // cream acts page ready behind
+    body.classList.add("card-takeover");      // card scales up to fill the screen (opaque)
+    // once the card fills the screen, swap to the real scrolling page
+    setTimeout(()=>{
+      body.classList.add("is-open");          // unlock scroll, show chrome
+      if(stage && stage.parentNode) stage.parentNode.removeChild(stage);  // fully remove — no residual layer
+      forceRepaint();                          // clear any stale GPU compositor layer
+    }, 820);
+  }
+
+  let opening=false;
+  function openInvitation(fast){
+    if(opening || body.classList.contains("is-open")) return;
+    opening=true;
+    const seal=document.getElementById("seal");
+
+    if(reduceMotion || fast){
+      setWarmth(1);
+      body.classList.add("acts-ready");
+      body.classList.add("is-open");
+      document.getElementById("stage").style.display="none";
+      revealAllReduced();
+      return;
+    }
+
+    // Staged, readable choreography (all CSS, driven by body classes):
+    //  0.00s  seal presses in + dry crack
+    //  0.20s  → .opening : flap begins its slow 1.1s fold; seal fades
+    //  1.10s  → .flap-done : flap has lain flat; retire it. warmth begins.
+    //  1.00s  card starts sliding up out of the pocket (CSS delay) → done ~2.3s
+    //  2.60s  handoff : card scales up to become the page
+    seal.classList.add("pressed"); playCrack();
+    setTimeout(()=> body.classList.add("opening"), 200);
+    setTimeout(()=> body.classList.add("flap-done"), 1150);
+    setTimeout(()=> animateWarmth(1,1200), 1100);
+    setTimeout(handoff, 3200);          // let the opened-envelope tableau breathe
+    setTimeout(swanRipple, 3750);
+  }
+
+  function revealAllReduced(){
+    document.querySelectorAll(".reveal,.tl-stop").forEach(el=>el.classList.add("shown"));
+    const p=document.getElementById("tl-path"); if(p) p.style.strokeDashoffset=0;
+    const v=document.getElementById("vows"); if(v) v.classList.add("drawn");
+  }
+
+  /* ---- swan ripple (one breath) ---- */
+  function swanRipple(){
+    if(reduceMotion) return;
+    const disp=document.getElementById("rippleDisp"), img=document.querySelector(".swans img");
+    if(!disp||!img) return;
+    img.style.filter="url(#ripple) drop-shadow(0 12px 26px rgba(74,28,28,.12))";
+    const start=performance.now(), dur=3000;
+    (function f(now){const t=(now-start)/dur;
+      if(t>=1){disp.setAttribute("scale",0);img.style.filter="drop-shadow(0 12px 26px rgba(74,28,28,.12))";return;}
+      disp.setAttribute("scale",(Math.sin(t*Math.PI)*8).toFixed(2));requestAnimationFrame(f);
+    })(performance.now());
+  }
+
+  /* ---- generic reveal-on-scroll ---- */
+  function initReveals(){
+    if(reduceMotion){ document.querySelectorAll(".reveal").forEach(e=>e.classList.add("shown")); return; }
+    const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("shown");io.unobserve(e.target);}}),{threshold:.25});
+    document.querySelectorAll(".reveal").forEach(e=>io.observe(e));
+  }
+
+  /* ---- timeline draw ---- */
+  function initTimeline(){
+    const tl=document.querySelector(".timeline"), path=document.getElementById("tl-path"),
+          line=document.querySelector(".tl-line"),
+          stops=[].slice.call(document.querySelectorAll(".tl-stop"));
+    if(!tl||!path) return; const LEN=700;
+    // Pin the spine so it runs exactly from the first bullet's centre to the last
+    // bullet's centre (the diamonds sit ~11.5px below each stop's top).
+    function fitSpine(){
+      if(!line||!stops.length) return;
+      const tlTop=tl.getBoundingClientRect().top, DIAM=11.5;
+      const first=stops[0].getBoundingClientRect().top - tlTop + DIAM;
+      const last=stops[stops.length-1].getBoundingClientRect().top - tlTop + DIAM;
+      line.style.top=first+"px";
+      line.style.height=Math.max(0,last-first)+"px";
+    }
+    fitSpine(); addEventListener("resize",fitSpine,{passive:true});
+    if(reduceMotion){ path.style.strokeDashoffset=0; stops.forEach(s=>s.classList.add("shown")); return; }
+    let fitted=false;
+    function onScroll(){
+      const r=tl.getBoundingClientRect(), vh=innerHeight;
+      // refit once the timeline first scrolls into view (layout & fonts settled)
+      if(!fitted && r.top<vh){ fitSpine(); fitted=true; }
+      const p=Math.max(0,Math.min(1,(vh*0.78 - r.top)/(r.height*0.85)));
+      path.style.strokeDashoffset=(LEN*(1-p)).toFixed(1);
+      stops.forEach((s,i)=>{ if(p>=(i+0.3)/stops.length) s.classList.add("shown"); });
+    }
+    addEventListener("scroll",onScroll,{passive:true}); addEventListener("resize",onScroll,{passive:true}); onScroll();
+  }
+
+  /* ---- monogram reveal (ink-settle wipe) ---- */
+  function initMonogram(){
+    const wrap=document.getElementById("vows"); if(!wrap) return;
+    if(reduceMotion){ wrap.classList.add("drawn"); return; }
+    const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){wrap.classList.add("drawn");io.disconnect();}}),{threshold:.5});
+    io.observe(wrap);
+  }
+
+  /* ---- tilt parallax ---- */
+  function initTilt(){
+    if(reduceMotion) return;
+    const items=[].slice.call(document.querySelectorAll("[data-tilt]")); if(!items.length) return;
+    let rx=0,ry=0,trx=0,try_=0,raf=null;
+    function loop(){
+      rx+=(trx-rx)*.1; ry+=(try_-ry)*.1;
+      items.forEach(el=>{el.style.transform=(el.dataset.base||"")+` perspective(700px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;});
+      if(Math.abs(trx-rx)>.01||Math.abs(try_-ry)>.01) raf=requestAnimationFrame(loop); else raf=null;
+    }
+    function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
+    addEventListener("pointermove",e=>{trx=-(e.clientY/innerHeight-.5)*6; try_=(e.clientX/innerWidth-.5)*6; kick();},{passive:true});
+    addEventListener("deviceorientation",e=>{if(e.gamma==null&&e.beta==null)return;
+      trx=Math.max(-6,Math.min(6,(e.beta||0)/8)); try_=Math.max(-6,Math.min(6,(e.gamma||0)/6)); kick();});
+  }
+
+  /* ---- RSVP ---- */
+  function initRSVP(){
+    const form=document.getElementById("rsvpForm"); if(!form) return; let choice=null;
+    form.querySelectorAll(".wax-toggle").forEach(b=>b.addEventListener("click",()=>{
+      form.querySelectorAll(".wax-toggle").forEach(x=>x.setAttribute("aria-pressed","false"));
+      b.setAttribute("aria-pressed","true"); choice=b.dataset.val;
+    }));
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      const data={name:form.name.value.trim(),guests:form.guests.value,choice};
+      // TODO: wire to a real endpoint (Formspree / Google Form / email). For now, hold locally.
+      console.log("RSVP captured (not yet sent):",data);
+      document.getElementById("stamp").classList.add("down");
+      form.style.transition="opacity .5s"; form.style.opacity=".12"; form.style.pointerEvents="none";
+      setTimeout(()=>{document.getElementById("confirmMsg").hidden=false;},430);
+    });
+    document.getElementById("addCal").addEventListener("click",e=>{e.preventDefault();downloadICS();});
+    document.getElementById("dirLink").addEventListener("click",e=>{e.preventDefault();
+      window.open("https://www.google.com/maps/search/?api=1&query=SK+Klyde+Grand+Ghaziabad","_blank","noopener");});
+  }
+  function downloadICS(){
+    // The wedding celebrations at SK Klyde Grand, Ghaziabad (10–12 Dec 2026),
+    // plus the Pune reception on 19 Dec. All-day events so timezones never mislead.
+    const evt=(uid,date,summary,loc)=>["BEGIN:VEVENT","UID:"+uid+"@kd-invitation",
+      "SUMMARY:"+summary,"DTSTART;VALUE=DATE:"+date,"LOCATION:"+loc,
+      "DESCRIPTION:With love\\, Divyanshika & Kumel.","END:VEVENT"].join("\r\n");
+    const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//DK//Wedding//EN","CALSCALE:GREGORIAN",
+      evt("dk-1","20261210","Engagement & Sangeet — Divyanshika & Kumel","SK Klyde Grand, Ghaziabad"),
+      evt("dk-2","20261211","Tilak, Haldi, Varmala & Phere — Divyanshika & Kumel","SK Klyde Grand, Ghaziabad"),
+      evt("dk-3","20261212","Nikah — Divyanshika & Kumel","SK Klyde Grand, Ghaziabad"),
+      evt("dk-4","20261219","Reception Dinner — Divyanshika & Kumel","Pune"),
+      "END:VCALENDAR"].join("\r\n");
+    const blob=new Blob([ics],{type:"text/calendar"}), a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="Divyanshika-Kumel-Wedding-Dec-2026.ics";
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }
+
+  function initMute(){
+    const btn=document.getElementById("muteBtn");
+    btn.addEventListener("click",()=>{soundOn=!soundOn; btn.textContent=soundOn?"♪ sound on":"♪ sound off";});
+  }
+
+  function init(){
+    if("scrollRestoration" in history) history.scrollRestoration="manual";
+    window.scrollTo(0,0);
+    const seal=document.getElementById("seal");
+    // Always play the full opening — including on refresh (no fast-open memory).
+    seal.addEventListener("click",()=>openInvitation(false));
+    seal.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openInvitation(false);}});
+    initReveals(); initTimeline(); initMonogram(); initTilt(); initRSVP(); initMute();
+    if(reduceMotion) openInvitation(true);
+  }
+  document.addEventListener("DOMContentLoaded",init);
+})();
+</script>
+</body>
+</html>
