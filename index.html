@@ -421,7 +421,7 @@ body.is-open .botanic-dress{opacity:1}
   padding:10vh 7vw;isolation:isolate;z-index:2;
 }
 
-/* ---- Act: the promise (swans / heart / save-the-date) ---- */
+/* ---- Act: the promise (portrait / invite / save-the-date) ---- */
 #act-promise{position:relative;overflow:hidden}
 /* hand-drawn botanical sprigs framing the corners (SVG, crisp at any size) */
 .botanical{position:absolute;width:min(46vw,260px);opacity:.55;pointer-events:none;z-index:0}
@@ -431,31 +431,17 @@ body.is-open .botanic-dress{opacity:1}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .reveal.shown{opacity:1;transform:none}
 
-.polaroid{background:#FBF8F0;padding:3.6% 3.6% 13%;width:min(54vw,220px);
-  box-shadow:0 3px 6px rgba(74,28,28,.06), 0 16px 32px rgba(74,28,28,.12);
-  border:1px solid rgba(74,28,28,.05);transform:rotate(-3.5deg)}
-.polaroid-photo{
-  aspect-ratio:1;
-  position:relative;
-  overflow:hidden;
-  background:var(--paper-shade);
+.promise-opener{display:grid;justify-items:center;text-align:center;gap:clamp(1.25rem,3.4vh,1.9rem);width:100%}
+.promise-opener .promise-line{font-size:clamp(1.05rem,4.7vw,1.35rem);letter-spacing:.12em;text-transform:uppercase;line-height:1.45}
+.promise-photo{
+  width:min(58vw,245px);aspect-ratio:1;overflow:hidden;background:var(--paper-shade);
+  border:1px solid rgba(74,28,28,.12);box-shadow:0 16px 34px -24px rgba(74,28,28,.45);
 }
-.polaroid-photo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center 38%;
-  filter:saturate(.98) contrast(1.03) brightness(1.02);
+.promise-photo img{width:100%;height:100%;object-fit:cover;object-position:center 38%}
+.promise-names{
+  font-family:var(--script);font-weight:400;color:var(--oxblood);text-align:center;
+  font-size:clamp(3.4rem,15vw,6rem);line-height:.86;
 }
-.polaroid-photo::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:radial-gradient(85% 72% at 50% 18%, transparent 55%, rgba(74,28,28,.10) 100%);
-  mix-blend-mode:multiply;
-}
-.polaroid-cap{font-family:var(--body);font-style:italic;color:var(--oxblood);text-align:center;font-size:.92rem;margin-top:7%;opacity:.85}
 
 .heart-frame{position:relative;width:min(82vw,390px);display:grid;place-items:center}
 .heart-frame img{width:100%;filter:drop-shadow(0 8px 18px rgba(120,85,55,.14))}
@@ -467,56 +453,6 @@ body.is-open .botanic-dress{opacity:1}
 .std-script{display:block;font-family:var(--script);font-size:clamp(2.35rem,8.8vw,3.35rem);line-height:.68}
 .std-date{display:block;font-family:var(--serif);font-variant:small-caps;letter-spacing:.16em;font-size:clamp(.82rem,3.2vw,1rem);margin-top:.2em;white-space:nowrap}
 
-/* Swans: a pale paper-cut given real mass — a solid ivory silhouette (cut from
-   the PNG's alpha) resting on a soft sage vellum medallion, with the original
-   image floated on top only for its embossed line detail. Reads as tactile
-   paper relief, not a faint ghost. */
-.swans{position:relative;width:min(80vw,390px);margin:0;display:flex;flex-direction:column;
-  align-items:center;isolation:isolate;padding-top:.5rem}
-/* names sit ABOVE the oval; the swan art follows below */
-.swan-names{order:0}
-.swans img{order:1}
-/* the medallion ground — sage vellum with a fine gold hairline; sits behind the swan art.
-   Anchored to the swan image (bottom portion of the figure), not the whole flex box. */
-.swan-medallion{
-  position:absolute;z-index:-2;left:50%;bottom:0;transform:translate(-50%,0);
-  width:118%;aspect-ratio:1.34;border-radius:50%;
-  background:
-    radial-gradient(78% 70% at 50% 40%,
-      rgba(247,242,232,.55) 0%,
-      rgba(138,154,130,.30) 55%,
-      rgba(92,107,87,.26) 100%);
-  border:1px solid rgba(176,141,87,.5);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.5),
-    inset 0 -20px 40px rgba(74,28,28,.07),
-    0 20px 46px -14px rgba(74,28,28,.16);
-}
-/* solid ivory swan body, masked from the PNG — this is what gives them presence.
-   Anchored to the bottom (aligned with the overlay img), and same width, so the
-   silhouette and the embossed-line overlay register exactly.
-   The layered same-color drop-shadows trace a crisp gold-tinted outline around the
-   silhouette so the swans' borders read clearly against the medallion. */
-.swans::before{
-  content:"";position:absolute;z-index:-1;left:0;bottom:0;width:100%;aspect-ratio:1200/895;
-  background:linear-gradient(150deg,#FCF9F1 0%,#EDE3D0 100%);
-  -webkit-mask:url("assets/swans.png") center/contain no-repeat;
-          mask:url("assets/swans.png") center/contain no-repeat;
-  filter:
-    drop-shadow(.6px 0 0 rgba(150,120,74,.55)) drop-shadow(-.6px 0 0 rgba(150,120,74,.55))
-    drop-shadow(0 .6px 0 rgba(150,120,74,.55)) drop-shadow(0 -.6px 0 rgba(150,120,74,.55))
-    drop-shadow(0 1px 0 rgba(255,255,255,.7)) drop-shadow(0 12px 20px rgba(74,28,28,.18));
-}
-/* original image floats on top, multiplied, to bring up the embossed line detail —
-   higher contrast + opacity so the interior borders (neck, wing, breast) are defined */
-.swans img{width:100%;position:relative;opacity:.82;mix-blend-mode:multiply;
-  filter:contrast(1.55) brightness(.98) drop-shadow(0 -1px 0 rgba(255,255,255,.6))}
-.swan-names{position:relative;z-index:1;order:0;display:flex;justify-content:center;align-items:baseline;
-  gap:.5em;margin-bottom:clamp(5.2rem,13vw,6.4rem);font-family:var(--script);
-  font-size:clamp(2rem,9vw,2.8rem);line-height:1;color:var(--oxblood)}
-.swan-names::before{content:"&";font-family:var(--serif);font-size:.62em;opacity:.6;
-  order:2;align-self:center}
-.swan-names span:last-child{order:3}
 .promise-line{font-family:var(--serif);font-weight:500;font-size:clamp(1.35rem,6vw,2rem);
   color:var(--oxblood);text-align:center;line-height:1.35;letter-spacing:.01em}
 .promise-line em{font-family:var(--script);font-style:normal;font-size:clamp(2.2rem,10vw,3.2rem);
@@ -690,14 +626,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
 <a class="brand-kd" href="#top" aria-label="Back to the beginning"><img src="assets/monogram.png" alt="Divyanshika &amp; Kumel"></a>
 <button class="mute" id="muteBtn" aria-label="Toggle sound">♪ sound on</button>
-
-<!-- swan ripple filter (one-shot) -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <filter id="ripple" x="-10%" y="-10%" width="120%" height="120%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.015 0.03" numOctaves="2" seed="3" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="0" id="rippleDisp" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</defs></svg>
+<audio id="bgMusic" src="the_mountain-wedding-522480.mp3" preload="none" loop></audio>
 
 <span id="top"></span>
 
@@ -761,12 +690,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     <img class="botanical tl" src="assets/sprig.svg" alt="" aria-hidden="true">
     <img class="botanical br" src="assets/sprig.svg" alt="" aria-hidden="true">
     <div class="promise">
-      <div class="polaroid reveal" data-tilt data-base="rotate(-4deg)">
-        <div class="polaroid-photo">
-          <img src="assets/couple-polaroid.jpg" width="720" height="720" loading="lazy" decoding="async" alt="Divyanshika and Kumel surrounded by flowers">
-        </div>
-        <p class="polaroid-cap">Divyanshika &amp; Kumel</p>
+      <div class="promise-opener reveal">
+        <p class="promise-line">Two Hearts. One Promise.<br>One Beautiful Forever.</p>
+        <figure class="promise-photo" aria-hidden="true">
+          <img src="assets/couple-polaroid.jpg" width="720" height="720" loading="lazy" decoding="async" alt="">
+        </figure>
+        <h2 class="promise-names">Divyanshika &amp;<br>Kumel</h2>
       </div>
+      <p class="promise-caption reveal">Together with their families,<br>
+        joyfully invite you to celebrate
+        the beginning of their forever — a union of love, laughter and togetherness.</p>
       <div class="heart-frame reveal" data-tilt>
         <img src="assets/lace-heart.png" alt="">
         <div class="heart-text">
@@ -774,15 +707,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
           <span class="std-date">11 · 12 · 2026</span>
         </div>
       </div>
-      <p class="promise-line reveal">Two hearts. One promise.<br><em>One beautiful forever.</em></p>
-      <figure class="swans reveal" data-tilt>
-        <span class="swan-medallion" aria-hidden="true"></span>
-        <img src="assets/swans.png" alt="Two swans forming a heart with their necks">
-        <figcaption class="swan-names"><span>Divyanshika</span><span>Kumel</span></figcaption>
-      </figure>
-      <p class="promise-caption reveal">Together with their families,<br>
-        <span class="promise-invite">Divyanshika &amp; Kumel</span> joyfully invite you to celebrate
-        the beginning of their forever — a union of love, laughter and togetherness.</p>
     </div>
   </section>
 
@@ -889,7 +813,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   "use strict";
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const body = document.body, root = document.documentElement;
-  let soundOn = true, audioCtx = null;
+  let soundOn = true, audioCtx = null, musicFadeFrame = null;
 
   function setWarmth(v){ root.style.setProperty("--warmth", (+v).toFixed(3)); }
 
@@ -940,6 +864,42 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     }catch(e){}
   }
 
+  function fadeMusicTo(target){
+    const music=document.getElementById("bgMusic");
+    if(!music) return;
+    if(musicFadeFrame) cancelAnimationFrame(musicFadeFrame);
+    const startVol=music.volume, start=performance.now(), dur=1200;
+    (function frame(now){
+      const t=Math.min(1,(now-start)/dur);
+      music.volume=startVol+(target-startVol)*t;
+      if(t<1) musicFadeFrame=requestAnimationFrame(frame);
+    })(performance.now());
+  }
+
+  function playBackgroundMusic(){
+    const music=document.getElementById("bgMusic");
+    if(!music || !soundOn) return;
+    music.loop=true;
+    if(music.paused){
+      music.volume=0;
+      const started=music.play();
+      if(started && typeof started.then==="function"){
+        started.then(()=>fadeMusicTo(.26)).catch(()=>{});
+      }else{
+        fadeMusicTo(.26);
+      }
+    }else{
+      fadeMusicTo(.26);
+    }
+  }
+
+  function pauseBackgroundMusic(){
+    const music=document.getElementById("bgMusic");
+    if(!music) return;
+    fadeMusicTo(0);
+    setTimeout(()=>{ if(!soundOn) music.pause(); }, 1300);
+  }
+
   function animateWarmth(to,dur){
     const from=parseFloat(getComputedStyle(root).getPropertyValue("--warmth"))||0, start=performance.now();
     (function frame(now){
@@ -958,7 +918,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
       body.classList.add("is-open");          // unlock scroll, show chrome
       if(stage && stage.parentNode) stage.parentNode.removeChild(stage);  // fully remove — no residual layer
       forceRepaint();                          // clear any stale GPU compositor layer
-    }, 820);
+    }, 780);
   }
 
   let opening=false;
@@ -982,31 +942,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     //  1.10s  → .flap-done : flap has lain flat; retire it. warmth begins.
     //  1.00s  card starts sliding up out of the pocket (CSS delay) → done ~2.3s
     //  2.60s  handoff : card scales up to become the page
-    seal.classList.add("pressed"); playCrack();
+    seal.classList.add("pressed"); playCrack(); playBackgroundMusic();
     setTimeout(()=> body.classList.add("opening"), 200);
     setTimeout(()=> body.classList.add("flap-done"), 1150);
     setTimeout(()=> animateWarmth(1,1200), 1100);
     setTimeout(handoff, 3200);          // let the opened-envelope tableau breathe
-    setTimeout(swanRipple, 3750);
   }
 
   function revealAllReduced(){
     document.querySelectorAll(".reveal,.tl-stop").forEach(el=>el.classList.add("shown"));
     const p=document.getElementById("tl-path"); if(p) p.style.strokeDashoffset=0;
     const v=document.getElementById("vows"); if(v) v.classList.add("drawn");
-  }
-
-  /* ---- swan ripple (one breath) ---- */
-  function swanRipple(){
-    if(reduceMotion) return;
-    const disp=document.getElementById("rippleDisp"), img=document.querySelector(".swans img");
-    if(!disp||!img) return;
-    img.style.filter="url(#ripple) drop-shadow(0 12px 26px rgba(74,28,28,.12))";
-    const start=performance.now(), dur=3000;
-    (function f(now){const t=(now-start)/dur;
-      if(t>=1){disp.setAttribute("scale",0);img.style.filter="drop-shadow(0 12px 26px rgba(74,28,28,.12))";return;}
-      disp.setAttribute("scale",(Math.sin(t*Math.PI)*8).toFixed(2));requestAnimationFrame(f);
-    })(performance.now());
   }
 
   /* ---- generic reveal-on-scroll ---- */
@@ -1095,7 +1041,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
   function initMute(){
     const btn=document.getElementById("muteBtn");
-    btn.addEventListener("click",()=>{soundOn=!soundOn; btn.textContent=soundOn?"♪ sound on":"♪ sound off";});
+    btn.addEventListener("click",()=>{
+      soundOn=!soundOn;
+      btn.textContent=soundOn?"♪ sound on":"♪ sound off";
+      if(soundOn && (opening || body.classList.contains("is-open"))) playBackgroundMusic();
+      else pauseBackgroundMusic();
+    });
   }
 
   function init(){
